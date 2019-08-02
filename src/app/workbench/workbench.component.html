@@ -1,0 +1,189 @@
+<!----Dropdown to select any time-period of the season---->
+<div *ngIf="responseData" class="btn-group" dropdown>
+  <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle dropdownClass"
+    aria-controls="dropdown-basic">
+    Period No: {{FYBADataFromBackEnd.Period}} <span class="caret"></span>
+  </button>
+
+  <ul id="dropdown-basic" *dropdownMenu class="dropdown-menu" role="menu" aria-labelledby="button-basic">
+    <li *ngFor="let dummy of ' '.repeat(FYBADataFromBackEnd.TotalPeriods).split(''), let x = index" role="menuitem">
+      <a *ngIf="FYBADataFromBackEnd.Period!= x+1" (click)="togglePeriod(x+1)" class="dropdown-item">{{x+1}}</a>
+      <a *ngIf="FYBADataFromBackEnd.Period== x+1" class="dropdown-item active">{{x+1}}</a>
+    </li>
+
+  </ul>
+  <!-- <div style="clear:both;"></div> -->
+  <button style="border-radius: 5px;" class="btn btn-success dropdownClass" (click)="saveData()" >Save Data</button>
+
+  <button style="border-radius: 5px;" class="btn btn-danger dropdownClass" (click)="reset()" >Reset</button>
+</div>
+
+<div class="Class100" *ngIf="jsonVar != null">
+  <ng-container *ngFor="let line of jsonVar.ResourceLine">
+    <div class="lineClass" id="{{line.LineDivId}}"></div>
+    <div id="s_{{line.LineDivId}}"></div>
+    <div id="e_{{line.LineDivId}}"></div>
+  </ng-container>
+
+
+  
+  <div style="top: 100%">
+    <div class="timeDiv">
+      <div class="timeSlotsBar">
+        <span>Time Slot</span>
+      </div>
+      <div class="parentTimeSlotDelete ">
+        <div *ngFor="let timeslot of jsonVar.TimeSlot" id="timeSlots" attr.Duration="{{timeslot.TimeValueInMinute}}"
+          attr.tsHeight="{{timeslot.TimeBoxHeight}}" class="secondGreenBox bgBlueNone" [dragula]="'slots'">
+          <div id="timeSlot" attr.SlotColor="{{timeslot.SlotColor}}" attr.Duration="{{timeslot.TimeValueInMinute}}"
+            attr.tsHeight="{{timeslot.TimeBoxHeight}}" class="{{timeslot.TimeDivId}}">
+            <div>{{timeslot.TimeText}}</div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- <div style="clear:both;"></div> -->
+
+
+      <div class="parentTimeSlotDelete marginTop80">
+        <div id="timeSlotDelete" class="timeSlotDelete"
+          [dragula]="'slots'" attrDelete="1">
+          <br />Drop for delete timeslot
+        </div>
+      </div>
+    </div>
+
+  
+
+    <div class="centerDiv">
+        <div class="zui-wrapper">
+            <div class="zui-scroller">
+        <table class="zui-table" cellpadding="0" cellspacing="0" border="0" width="100%">
+          <tr>
+            <td>
+              <div class="mainDiv width100">
+                <div class="topBlueBar">
+                  <span>{{jsonVar.Timing.Heading}}</span>
+                </div>
+                <div class="greyBox" *ngFor="let obj of jsonVar.Timing.TimeValue" id="{{'timeDiv_' + obj.TimeGroup}}">
+                  <div>{{obj.TimeValue}}
+                    <span class="lineTime"></span>
+                  </div>
+                </div>
+                <div class="greyBox" style="height: 6px;">&nbsp;</div>
+              </div>
+            </td>
+            <td *ngFor="let slot of jsonVar.allSlots; let allSlotsIndex = index">
+              <div class="mainDiv">
+                <div class="topBlueBar">
+                  <span>{{slot.Heading}}</span>
+                </div>
+                <div class="stripeBoxWhite" *ngFor="let slotBox of slot.AllSlotBox; let slotBoxIndex = index;"
+                  [ngClass]="(slotBox.IsBlackout && slotBox.IsBlankBox)? 'bgGrey' : 'bgWhite'">
+                  <ng-container *ngIf="slotBox.IsBlankBox==false;else nullSlot">
+                    <ng-container *ngIf="slotBox.IsGameBox==true;else noGame">
+                      <div [dragula]="'slots'" attr.Location={{slotBox.Location}} attr.StartTime={{slotBox.StartTime}}
+                        attr.EndTime={{slotBox.EndTime}} attr.boxHeight={{slotBox.Height}}>
+                        <ng-container *ngFor="let gameTiming of slotBox.AllGameBox">
+                          <ng-container *ngFor="let gameBox of gameTiming.AllBox">
+                            <ng-container *ngIf="gameBox.BoxHeight != '0px';else lastElse">
+                              <!--Div with Game info-->
+                              <div id="gameSlot" style="position:absolute; border:1px solid; z-index:2;width:100%;"
+                                [dragula]="'slots'"
+                                [ngStyle]="{'top': gameBox.BoxTop, 'height': gameBox.BoxHeight, 'border-color': slotBox.SlotColor}"
+                                attr.TimeSlotId="{{slotBox.TimeSlotId}}"  attr.Location={{slotBox.Location}}
+                                attr.StartTime={{slotBox.StartTime}} attr.EndTime={{slotBox.EndTime}}
+                                attr.SlotHeight="{{slotBox.Height}}" attr.Duration={{slotBox.Duration}}
+                                attr.allSlotsIndex={{allSlotsIndex}} attr.slotBoxIndex={{slotBoxIndex}}>
+
+                                <div #gameElement
+                                  style="position:relative;  right:0; color:#FFF; max-width: 300px; max-height:150px; padding:5px; font-size:12px;"
+                                  title="{{gameBox.BoxValue}}" attrGameBox="1"                                   
+                                  class="{{gameBox.BoxValue}} dragBox bgBlueNone" id="{{gameBox.GameDivId}}"
+                                  attr.ResourceGroup="{{gameBox.ResourceGroup}}" attr.SlotColour="{{gameBox.BoxColor}}"
+                                  attr.Division="{{gameBox.Division}}"
+                                  [ngStyle]="{'background-color': gameBox.BackgroundColor}"> {{gameBox.BoxValue}} </div>
+                              </div>
+                            </ng-container>
+                            <ng-template #lastElse>
+                              <div class="borderRed"></div>
+                            </ng-template>
+                          </ng-container>
+                        </ng-container>
+                      </div>
+                    </ng-container>
+                    <ng-template #noGame>
+                      <div id="blankSlot" [dragula]="'slots'" attr.SlotDivid="{{slotBox.SlotDivId}}"
+                        attr.TimeSlotId="{{slotBox.TimeSlotId}}"  attr.Type="blankSlot" attr.Location={{slotBox.Location}}
+                        attr.StartTime={{slotBox.StartTime}} attr.EndTime={{slotBox.EndTime}}
+                        attr.boxHeight={{slotBox.Height}} attr.Duration={{slotBox.Duration}}
+                        attr.SeriesId={{slotBox.SeriesId}} attr.allSlotsIndex={{allSlotsIndex}}
+                        attr.slotBoxIndex={{slotBoxIndex}}>
+
+                        <div #timeElement
+                          style="position:absolute; left:0; top:0; border:1px solid;  width:100%; z-index:1;"
+                          attr.TimeSlotId="{{slotBox.TimeSlotId}}"  attr.Type="blankSlot" attrFreeSlot="1"
+                          class="{{slotBox.SlotDivId}}" attr.Location={{slotBox.Location}}
+                          attr.StartTime={{slotBox.StartTime}} attr.EndTime={{slotBox.EndTime}}
+                          attr.boxHeight={{slotBox.Height}} attr.Duration={{slotBox.Duration}}
+                          [ngStyle]="{'top': slotBox.Top, 'height': slotBox.Height, 'border-color': slotBox.SlotColor}"
+                          class="borderGreen">
+                        </div>
+                      </div>
+                    </ng-template>
+                  </ng-container>
+                  <!---In-case there's a blackout, this template will be shown---->
+                  <ng-template #nullSlot>
+                    <div *ngIf="slotBox.IsBlankBox==true && slotBox.IsBlackout==false" id="nullSlot" class="relativeDiv"
+                      [dragula]="'slots'"  attr.Location={{slotBox.Location}} attr.StartTime={{slotBox.StartTime}}
+                      attr.EndTime={{slotBox.EndTime}} attr.boxHeight={{slotBox.Height}}>
+                    </div>
+
+                    <div *ngIf="slotBox.IsBlankBox==true && slotBox.IsBlackout==true" id="blackoutSlot"
+                      class="blackoutDiv" attr.Location={{slotBox.Location}} attr.StartTime={{slotBox.StartTime}}
+                      attr.EndTime={{slotBox.EndTime}}></div>
+
+                  </ng-template>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </table>
+            </div>
+        <div style="clear:both;"></div>
+      </div>
+    </div>
+
+
+
+    <!----Contains all the free-games that haven't been assigned to a time-slot---->
+    <div class="gamesDiv">
+      <div class="gamesBlueBar">
+        <span>Games</span>
+      </div>
+      <div id="freeGame" class="greenBoxScroll" [dragula]="'slots'">
+        <div class="secondBlueBox" *ngFor="let freeGame of jsonVar.FreeGames" 
+           attr.GameName="{{freeGame.Name}}"  attr.gameMatchupId={{freeGame.GameMatchupId}}
+          attr.ResourceGroup="{{freeGame.ResourceGroup}}" attrFreeGame="1" id="{{freeGame.GameDivId}}" 
+          attr.Division="{{freeGame.Division}}" >
+          <div>
+            {{freeGame.Name}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Container to Create Lines between common resources-->
+<ng-container *ngIf="responseData">
+  <ng-container *ngFor="let line of jsonVar.ResourceLine">
+    {{makeLine(line.StartPointDivId,line.EndPointDivId,line.LineDivId)}}
+  </ng-container>
+</ng-container>
+
+
+<!--CSS Lodader-->
+<app-css-loader *ngIf="fetchingData"></app-css-loader>
