@@ -1,4 +1,6 @@
 
+
+
 * {
 	margin:0px;
 	padding:0px;
@@ -305,3 +307,4 @@ body {
     width: 100px;
 }
 .width100{width:100px;}
+.helping_text{position: absolute; right:4px; top:2px; font-size: 9px; color:#204d74;}
