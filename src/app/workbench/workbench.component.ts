@@ -61,10 +61,10 @@ export class WorkbenchComponent implements OnInit {
 
       accepts: function (el, target, source, sibling) {
         if (source.id == 'freeGame' && target.id == 'blankSlot') {
-          if(el.attributes.getNamedItem("division").value==target.attributes.getNamedItem("DivisionId").value){
+          if(el.attributes.getNamedItem("division").value==target.attributes.getNamedItem("DivisionId").value || target.attributes.getNamedItem("DivisionId").value==''){
             return true
           }else{
-            return false;
+             return false;
           }
         }else if (source.id == 'timeSlots' && target.id == 'nullSlot') {  
             var validity = scope.checkTimeSlotDropValidity(source, target);
@@ -75,10 +75,10 @@ export class WorkbenchComponent implements OnInit {
         }else if (source.id == 'gameSlot' && target.id == 'freeGame') {
             return true
         }else if (source.id == 'gameSlot' && target.id == 'blankSlot') {
-          if(el.attributes.getNamedItem("division").value==target.attributes.getNamedItem("DivisionId").value){
+          if(el.attributes.getNamedItem("division").value==target.attributes.getNamedItem("DivisionId").value || target.attributes.getNamedItem("DivisionId").value==""){
             return true
           }else{
-            return false;
+             return false;
           }
         }else if (source.id == 'blankSlot' && target.id == 'timeSlotDelete') {
             return true
@@ -111,7 +111,7 @@ export class WorkbenchComponent implements OnInit {
         console.log(source);
         if (target != null) {
           if (source.id == 'freeGame' && target.id == 'blankSlot') {
-            if(el.attributes.getNamedItem("division").value==target.attributes.getNamedItem("DivisionId").value){
+            if(el.attributes.getNamedItem("division").value==target.attributes.getNamedItem("DivisionId").value || target.attributes.getNamedItem("DivisionId").value==''){
               this.freeGametoBlankSlot(name, el, target, source, sibling);
             }            
           }
@@ -131,7 +131,7 @@ export class WorkbenchComponent implements OnInit {
           }
 
           else if (source.id == 'gameSlot' && target.id == 'blankSlot') {
-            if(el.attributes.getNamedItem("division").value==target.attributes.getNamedItem("DivisionId").value){
+            if(el.attributes.getNamedItem("division").value==target.attributes.getNamedItem("DivisionId").value || target.attributes.getNamedItem("DivisionId").value==""){
               this.gameSlottoBlankSlot(name, el, target, source, sibling);
             }
           }
@@ -1785,5 +1785,8 @@ export class WorkbenchComponent implements OnInit {
     }
   }
 }
+
+
+
 
 

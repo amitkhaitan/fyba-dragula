@@ -180,8 +180,8 @@ body {
 
 .greenBoxScroll {
 	position: relative;
-	/* max-height:535px;
-	overflow:auto; */
+	 max-height:551px;
+	overflow:scroll; 
 }
 
 .greenBoxScroll .bgBlueNone{

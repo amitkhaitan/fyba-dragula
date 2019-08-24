@@ -187,3 +187,11 @@
 
 <!--CSS Lodader-->
 <app-css-loader *ngIf="fetchingData"></app-css-loader>
+
+<script>
+ $(document).ready(function() {
+  $(".greenBoxScroll").bind("mousewheel", function() {
+    return false;
+});
+    });
+</script>
