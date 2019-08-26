@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Inject } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, Inject,HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DragulaService } from 'ng2-dragula';
 import { DataService } from './../data.service';
@@ -13,6 +13,19 @@ import { TravelIndex } from './../models/travel-index.model';
 
 import * as $ from 'jquery';
 
+// $(document).ready(function() { 
+//   if(document.addEventListener){ /* Chrome, Safari, Firefox */
+//       document.addEventListener('DOMMouseScroll', stopWheel, false);
+//   }   
+//   function stopWheel(e){
+//       if(!e){ e = window.event; } /* IE7, IE8, Chrome, Safari */
+//       if(e.preventDefault) { e.preventDefault(); } /* Chrome, Safari, Firefox */
+//       e.returnValue = false; /* IE7, IE8 */
+//   }
+
+  
+// });
+
 @Component({
   selector: 'app-workbench',
   templateUrl: './workbench.component.html',
@@ -21,7 +34,22 @@ import * as $ from 'jquery';
 export class WorkbenchComponent implements OnInit {
   @ViewChild('timeElement') private timeElement: ElementRef;
   @ViewChild('gameElement') private gameElement: ElementRef;
+  @HostListener('wheel', ['$event'])
+  handleWheelEvent(event) {
+    event.preventDefault();
+  }
 
+ 
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    console.log(event);
+    if(event.which===38 || event.which===40){
+      event.preventDefault();
+      return false;
+    }
+  }
+  
+  
   urlParams = {
     GameScheduleId: null,
     LoginUserId: null,
@@ -146,7 +174,7 @@ export class WorkbenchComponent implements OnInit {
 
   }
 
-
+ 
   ngOnInit() {
 
     let model = this.activatedRoute.snapshot.queryParams;
@@ -161,8 +189,8 @@ export class WorkbenchComponent implements OnInit {
 
   fetchInitialData(model) {
     this.fetchingData = true;
-    this.dataService.getWorkbenchData(model)  
-    //this.dataService.getWorkbenchDataOld()      
+    //this.dataService.getWorkbenchData(model)  
+     this.dataService.getWorkbenchDataOld()      
       .subscribe(
         (res) => {
           this.responseData = res;
@@ -1777,6 +1805,8 @@ export class WorkbenchComponent implements OnInit {
       line.style["-ms-transform"] = 'rotate(' + ANG + 'deg)';
       line.style["-o-transform"] = 'rotate(' + ANG + 'deg)';
       line.style["-transform"] = 'rotate(' + ANG + 'deg)';
+     
+
       line.style.top = top + 'px';
       line.style.left = left + 'px';
       line.style.height = H + 'px';
