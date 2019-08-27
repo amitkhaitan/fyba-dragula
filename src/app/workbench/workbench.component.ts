@@ -178,7 +178,7 @@ export class WorkbenchComponent implements OnInit {
   ngOnInit() {
 
     let model = this.activatedRoute.snapshot.queryParams;
-    console.log(this.activatedRoute.snapshot.queryParams);
+    //console.log(this.activatedRoute.snapshot.queryParams);
     this.urlParams.GameScheduleId = model.GameScheduleId;
     this.urlParams.LoginUserId = model.LoginUserId;
     this.urlParams.Period = model.Period;
@@ -189,8 +189,8 @@ export class WorkbenchComponent implements OnInit {
 
   fetchInitialData(model) {
     this.fetchingData = true;
-    //this.dataService.getWorkbenchData(model)  
-     this.dataService.getWorkbenchDataOld()      
+    this.dataService.getWorkbenchData(model)  
+     //this.dataService.getWorkbenchDataOld()      
       .subscribe(
         (res) => {
           this.responseData = res;
@@ -272,17 +272,17 @@ export class WorkbenchComponent implements OnInit {
     this.dataService.togglePeriod(this.urlParams,timePeriodNumber).subscribe(
       (res) => {
         this.responseData = res;
-        console.log(this.responseData);
+        //console.log(this.responseData);
         //console.log(JSON.stringify(this.responseData));
         this.jsonVar = this.responseData.CurrentPeriodSlot;
-        console.log(this.jsonVar);
+        //console.log(this.jsonVar);
         this.urlParams.Period = timePeriodNumber;
         this.fetchingData = false;
-        console.log("Url Params: ");
-        console.log(this.urlParams);
+        //console.log("Url Params: ");
+        //console.log(this.urlParams);
       },
         (err) => {
-          console.log(err);
+          //console.log(err);
           this.fetchingData = false;
           const initialState = {
             title: 'Error',
@@ -445,15 +445,15 @@ export class WorkbenchComponent implements OnInit {
                 for (let i = 0; i < this.blackouts.length; ++i) {
                   if (slot.FacilityCurrentPeriodDate == this.blackouts[i].Date) {
 
-                    console.log('Blackout DateMatches');
+                   // console.log('Blackout DateMatches');
                     if (target.attributes.getNamedItem('location').value == this.blackouts[i].FacilityName) {
-                      console.log('Location Matches');
+                      //console.log('Location Matches');
                       let slotStartTime = moment(element.StartTime, "HH:mm A");
                       let blackoutStartTime = moment(this.blackouts[i].StartTime, "HH:mm A");
                       let blackoutEndTime = moment(this.blackouts[i].EndTime, "HH:mm A");
-                      console.log(element.StartTime);
-                      console.log(this.blackouts[i].StartTime);
-                      console.log(this.blackouts[i].EndTime);
+                      //console.log(element.StartTime);
+                     // console.log(this.blackouts[i].StartTime);
+                     // console.log(this.blackouts[i].EndTime);
 
                       if (slotStartTime.isSameOrAfter(blackoutStartTime) && slotStartTime.isBefore(blackoutEndTime)) {
                         console.log("It is a blackout");

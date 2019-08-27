@@ -1,4 +1,5 @@
 <!----Dropdown to select any time-period of the season---->
+<div class="bgTopHide">
 <div *ngIf="responseData" class="btn-group" dropdown>
   <button id="button-basic" dropdownToggle type="button" class="btn btn-primary dropdown-toggle dropdownClass"
     aria-controls="dropdown-basic">
@@ -17,6 +18,7 @@
 
   <button style="border-radius: 5px;" class="btn btn-danger dropdownClass" (click)="reset()" >Reset</button>
 </div>
+</div>
 
 <div class="Class100" *ngIf="jsonVar != null">
   <ng-container *ngFor="let line of jsonVar.ResourceLine">
@@ -32,7 +34,7 @@
       <div class="timeSlotsBar">
         <span>Time Slot</span>
       </div>
-      <div class="parentTimeSlotDelete ">
+      <div class="parentTimeSlotDelete">
         <div *ngFor="let timeslot of jsonVar.TimeSlot" id="timeSlots" attr.Duration="{{timeslot.TimeValueInMinute}}"
           attr.tsHeight="{{timeslot.TimeBoxHeight}}" class="secondGreenBox bgBlueNone" [dragula]="'slots'">
           <div id="timeSlot" attr.SlotColor="{{timeslot.SlotColor}}" attr.Duration="{{timeslot.TimeValueInMinute}}"
@@ -40,10 +42,7 @@
             <div>{{timeslot.TimeText}}</div>
           </div>
         </div>
-
       </div>
-
-
       <!-- <div style="clear:both;"></div> -->
 
 
@@ -53,6 +52,7 @@
           <br />Drop for delete timeslot
         </div>
       </div>
+      <div class="bgLeftHide"></div>
     </div>
 
   
@@ -174,8 +174,11 @@
         </div>
       </div>
     </div>
+    <div class="clearfix"></div>
+    <div class="bgBottomHide"></div>
   </div>
 </div>
+
 
 <!--Container to Create Lines between common resources-->
 <ng-container *ngIf="responseData">
